@@ -13,13 +13,14 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  registerUser(user: User) {
-    const body: User = {
+  registerUser(user: User, roles: string[]) {
+    const body = {
       UserName: user.UserName,
       Password: user.Password,
       FirstName: user.FirstName,
       LastName: user.LastName,
-      Email: user.Email
+      Email: user.Email,
+      Roles: roles
     }
     return this.http.post(this.rootUrl + 'api/User/Register', body);
   }
@@ -41,5 +42,10 @@ export class UserService {
       return this.http.get(this.rootUrl + 'api/GetUserClaims', {headers: new HttpHeaders({
           'Authorization': 'Bearer ' + localStorage.getItem('userToken')
         })});
+  }
+
+  getAllRoles() {
+    var reqHeader = new HttpHeaders({'No-Auth': 'True'});
+    return this.http.get(this.rootUrl + '/api/GetAllRoles', {headers: reqHeader});
   }
 }
